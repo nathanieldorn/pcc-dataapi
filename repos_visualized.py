@@ -29,22 +29,36 @@ def plot_repos():
     repo_dicts = call_api()
 
     # print("\nSelected information about first repository:\n")
-
     repo_names = [dict["name"] for dict in repo_dicts]
     repo_stars = [dict["stargazers_count"] for dict in repo_dicts]
 
-    fig = px.bar(x=repo_names, y=repo_stars, color_discrete_sequence=["gold"])
-    fig.update_layout(template="plotly_dark")
-    fig.show()
-
-    """
-    # loop through the dictionary and print the summary info, limiting descrptions to 200 chars
+    # create tootips
+    hover_texts = []
     for repo in repo_dicts:
-        print(f"\nName: {repo['name']}")
-        print(f"Owner: {repo['owner']['login']}")
-        print(f"Stars: {repo['stargazers_count']}")
-        print(f"Respository: {repo['html_url']}")
-        print(f"Created: {repo['created_at']}")
-        print(f"Updated: {repo['updated_at']}")
-        print(f"Description: {repo['description']}"[:200])
-    """
+        owner = repo["owner"]["login"]
+        description = repo["description"]
+        hover_text = f"{owner} <br />{description}"
+        hover_texts.append(hover_text)
+
+    # plot repos as bar chart
+    title = "GitHub's Most-Starred Python Projects"
+    labels = {"x": "Repository", "y": "Stars"}
+    fig = px.bar(
+        x=repo_names,
+        y=repo_stars,
+        title=title,
+        labels=labels,
+        color_discrete_sequence=["gold"],
+        hover_name=hover_texts,
+    )
+    fig.update_layout(
+        title_font_size=24,
+        xaxis_title_font_size=18,
+        yaxis_title_font_size=18,
+        template="plotly_dark",
+        hoverlabel=dict(
+            bgcolor="white",
+            font_size=16,
+        ),
+    )
+    fig.show()
