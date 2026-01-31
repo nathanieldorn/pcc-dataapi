@@ -1,3 +1,4 @@
+from hacker_news import get_story_info
 from python_repos import call_api, print_selected_info
 from repos_visualized import plot_repos
 
@@ -11,6 +12,9 @@ def main():
 
     # call the api, visualize results from repos_visualized.py
     plot_repos()
+
+    # call the hacker news api and return summary info
+    # get_story_info()
 
 
 if __name__ == "__main__":
