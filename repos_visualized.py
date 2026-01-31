@@ -29,36 +29,45 @@ def plot_repos():
     repo_dicts = call_api()
 
     # print("\nSelected information about first repository:\n")
-    repo_names = [dict["name"] for dict in repo_dicts]
-    repo_stars = [dict["stargazers_count"] for dict in repo_dicts]
+    repo_names = [repo["name"] for repo in repo_dicts]
+    repo_stars = [repo["stargazers_count"] for repo in repo_dicts]
 
-    # create tootips
-    hover_texts = []
-    for repo in repo_dicts:
-        owner = repo["owner"]["login"]
-        description = repo["description"]
-        hover_text = f"{owner} <br />{description}"
-        hover_texts.append(hover_text)
+    # create tootips and limt descriptions to 100 chars
+    hover_names = [repo["owner"]["login"] for repo in repo_dicts]
+    hover_description = [repo["description"] for repo in repo_dicts]
+
+    repo_links = []
+    for r, repo in enumerate(repo_dicts):
+        repo_url = repo["html_url"]
+        repo_link = f"<a href='{repo_url}'>{repo_names[r]}</a>"
+        repo_links.append(repo_link)
 
     # plot repos as bar chart
     title = "GitHub's Most-Starred Python Projects"
     labels = {"x": "Repository", "y": "Stars"}
     fig = px.bar(
-        x=repo_names,
+        x=repo_links,
         y=repo_stars,
         title=title,
         labels=labels,
         color_discrete_sequence=["gold"],
-        hover_name=hover_texts,
+        hover_name=hover_names,
+        hover_data={"Description": hover_description},
     )
+    # update font sizes, color theme, and reformat tooltip
     fig.update_layout(
         title_font_size=24,
         xaxis_title_font_size=18,
         yaxis_title_font_size=18,
         template="plotly_dark",
         hoverlabel=dict(
-            bgcolor="white",
+            bgcolor="rgb(30, 30, 30)",
             font_size=16,
+            font_color="whitesmoke",
+            align="left",
         ),
     )
+    fig.update_traces(marker_opacity=0.75)
+    fig.update_xaxes(tickfont=dict(size=16))
+
     fig.show()
