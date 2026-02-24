@@ -22,15 +22,6 @@ def call_api():
 
     return repo_dicts
 
-    """
-    # remove block comment to use
-    # examine keys for first response
-    repo_dict = repo_dicts[0]
-    print(f"\nKeys: {len(repo_dict)}")
-    for key in sorted(repo_dict.keys()):
-        print(key)
-    """
-
 
 def print_selected_info():
     """prints summary information about repos"""

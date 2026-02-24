@@ -11,7 +11,7 @@ def call_api():
     headers = {"Accept": "application/vnd.github.v3+json"}
     response = requests.get(api_query_url, headers=headers)
 
-    # covnert the response into a dictionary
+    # convert the response into a dictionary
     response_dict = response.json()
     print(f"Status code: {response.status_code}")
     print(f"Total repositories: {response_dict['total_count']}")
